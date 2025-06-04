@@ -192,15 +192,3 @@ MIT License - feel free to use, modify, and distribute.
 ---
 
 ⭐ **Star this repo** if you find it useful!
-
-```
-
-This README covers:
-- ✅ Clear feature overview with examples
-- ✅ Installation instructions for different use cases
-- ✅ Usage examples and keyboard shortcuts
-- ✅ Customization guide
-- ✅ Technical details for developers
-- ✅ Professional formatting with emojis
-- ✅ Contributing guidelines
-```
