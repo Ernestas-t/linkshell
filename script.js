@@ -6,6 +6,8 @@ class HackerStartpage {
     this.currentCompletion = null;
     this.possibleCompletions = [];
     this.completionIndex = -1;
+    this.lastKeyPress = null;
+    this.lastKeyTime = 0;
     this.searchProviders = {
       b: {
         name: "Brave",
@@ -34,6 +36,9 @@ class HackerStartpage {
     commandInput.addEventListener("input", (e) => this.handleInput(e));
     commandInput.addEventListener("keydown", (e) => this.handleKeydown(e));
     fileInput.addEventListener("change", (e) => this.handleFileUpload(e));
+
+    // Global keydown listener for dd when input is not focused
+    document.addEventListener("keydown", (e) => this.handleGlobalKeydown(e));
 
     // Load bookmarks from localStorage
     this.loadFromStorage();
@@ -289,9 +294,43 @@ class HackerStartpage {
     }
   }
 
+  handleGlobalKeydown(event) {
+    const commandInput = document.getElementById("commandInput");
+    const currentTime = Date.now();
+
+    // Only handle global shortcuts when input is NOT focused
+    if (document.activeElement === commandInput) {
+      return; // Input is focused, don't interfere
+    }
+
+    // Handle double-press 'd' to clear input globally
+    if (event.key === "d") {
+      if (this.lastKeyPress === "d" && currentTime - this.lastKeyTime < 300) {
+        // Double 'd' pressed within 300ms
+        event.preventDefault();
+        commandInput.value = "";
+        this.removeAutocompletePreview();
+
+        // Clear previous output first, then show the dd message
+        this.clearOutput();
+        this.showOutput("Input cleared (dd)", "info");
+
+        this.lastKeyPress = null;
+        // Focus the input after clearing
+        commandInput.focus();
+        return;
+      }
+      this.lastKeyPress = "d";
+      this.lastKeyTime = currentTime;
+    } else {
+      this.lastKeyPress = null;
+    }
+  }
+
   handleKeydown(event) {
     const input = event.target;
 
+    // Remove the dd handling from here since it's now global
     switch (event.key) {
       case "Enter":
         event.preventDefault();
@@ -354,6 +393,9 @@ class HackerStartpage {
         break;
       case "import":
         this.handleImportCommand();
+        break;
+      case "export":
+        this.handleExportCommand();
         break;
       case "b":
       case "g":
@@ -430,11 +472,72 @@ class HackerStartpage {
     );
   }
 
+  handleExportCommand() {
+    if (this.bookmarks.length === 0) {
+      this.showOutput(
+        "No bookmarks to export. Import some bookmarks first.",
+        "error",
+      );
+      return;
+    }
+
+    // Create HTML export in Netscape bookmark format
+    const html = this.generateBookmarkHTML();
+
+    // Create blob and download
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+
+    // Create temporary download link
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `terminal-startpage-bookmarks-${new Date().toISOString().split("T")[0]}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Clean up
+    URL.revokeObjectURL(url);
+
+    this.showOutput(
+      `Exported ${this.bookmarks.length} bookmarks to HTML file`,
+      "success",
+    );
+  }
+
+  generateBookmarkHTML() {
+    const timestamp = Math.floor(Date.now() / 1000);
+
+    let html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! -->
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>Bookmarks</TITLE>
+<H1>Bookmarks</H1>
+
+<DL><p>
+    <DT><H3 ADD_DATE="${timestamp}" LAST_MODIFIED="${timestamp}">Terminal Startpage Bookmarks</H3>
+    <DL><p>
+`;
+
+    // Add each bookmark
+    this.bookmarks.forEach((bookmark) => {
+      html += `        <DT><A HREF="${bookmark.url}" ADD_DATE="${timestamp}">${bookmark.title}</A>\n`;
+    });
+
+    html += `    </DL><p>
+</DL><p>`;
+
+    return html;
+  }
+
   showHelp() {
     const helpText = `Available commands:
   <bookmark_name> - Open bookmark by typing its name directly
   <url>           - Open URL directly (e.g., netflix.com, https://google.com)
   import          - Import bookmarks from HTML file
+  export          - Export bookmarks to HTML file
   help            - Show this help message
   clear           - Clear terminal output
 
@@ -443,6 +546,12 @@ Search commands:
   g <query>       - Search Google for query
   y <query>       - Search YouTube for query
   r <query>       - Search Reddit for query
+
+Keyboard shortcuts:
+  dd              - Clear input (double-tap 'd')
+  Tab             - Autocomplete bookmark names
+  ↑/↓             - Navigate command history
+  Escape          - Clear autocomplete
 
 Note: Use Tab for autocomplete and cycling through bookmark options`;
 
