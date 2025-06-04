@@ -1,6 +1,6 @@
 # Linkshell Startpage
 
-A sleek, terminal-inspired browser startpage for managing bookmarks with a hacker aesthetic. Features zsh-style autocomplete, search functionality, and a beautiful Gruvbox color scheme with transparency effects.
+A sleek, terminal-inspired browser startpage for managing bookmarks with a hacker aesthetic. Features zsh-style autocomplete, search functionality, and a beautiful Gruvbox color scheme.
 
 ![Terminal Startpage Demo](https://via.placeholder.com/800x500/282828/ebdbb2?text=Terminal+Startpage)
 
