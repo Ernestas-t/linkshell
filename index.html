@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>arch@zen-browser:~$</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="terminal">
+      <div class="terminal-body">
+        <div class="prompt-line">
+          <span class="user">arch@zen-browser</span>:<span class="path">~</span
+          >$
+          <span class="command">ls bookmarks/</span>
+        </div>
+
+        <div id="bookmarkList" class="bookmark-list">
+          <div class="no-bookmarks">
+            No bookmarks found. Import bookmarks to get started.
+          </div>
+        </div>
+
+        <div class="prompt-line">
+          <span class="user">arch@zen-browser</span>:<span class="path">~</span
+          >$
+          <input
+            type="text"
+            id="commandInput"
+            placeholder="<bookmark_name>"
+            autofocus
+          />
+        </div>
+
+        <div id="output" class="output"></div>
+
+        <div class="import-section" id="importSection">
+          <div class="prompt-line">
+            <span class="user">arch@zen-browser</span>:<span class="path"
+              >~</span
+            >$
+            <span class="command">import --help</span>
+          </div>
+          <div class="help-text">
+            Usage: Click to import bookmark file<br />
+            Supported formats: HTML export from Firefox, Chrome, etc.
+          </div>
+          <input
+            type="file"
+            id="bookmarkFile"
+            accept=".html"
+            style="display: none"
+          />
+          <div
+            class="file-drop"
+            onclick="document.getElementById('bookmarkFile').click()"
+          >
+            [CLICK TO IMPORT BOOKMARKS]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
