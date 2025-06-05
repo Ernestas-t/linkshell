@@ -46,7 +46,34 @@ class HackerStartpage {
     // Show welcome message
     this.showWelcome();
 
+    // Multiple attempts to focus the input
+    this.focusInput();
+  }
+
+  focusInput() {
+    const commandInput = document.getElementById("commandInput");
+
+    // Immediate focus
     commandInput.focus();
+
+    // Delayed focus (in case immediate doesn't work)
+    setTimeout(() => {
+      commandInput.focus();
+    }, 100);
+
+    // Focus on any click anywhere on the page
+    document.addEventListener("click", () => {
+      if (document.activeElement !== commandInput) {
+        commandInput.focus();
+      }
+    });
+
+    // Focus when page becomes visible (tab switching)
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        commandInput.focus();
+      }
+    });
   }
 
   showWelcome() {
