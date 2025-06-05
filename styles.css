@@ -92,15 +92,14 @@ body {
 .autocomplete-preview {
   position: absolute;
   color: var(--gray);
-  font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
-  font-size: 14px;
-  line-height: 1.25;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.4;
   pointer-events: none;
   z-index: 1;
   left: 0;
   top: 0;
   margin-left: 8px;
-  opacity: 1;
 }
 
 .bookmark-list {
@@ -125,11 +124,6 @@ body {
 .bookmark-item:hover {
   background-color: var(--bg1);
   color: var(--fg0);
-}
-
-.bookmark-item.folder {
-  color: var(--blue);
-  font-weight: bold;
 }
 
 .bookmark-item.executable {
@@ -163,15 +157,10 @@ body {
 }
 
 .output.system-info {
-  font-family: "JetBrains Mono", monospace;
+  font-family: inherit;
   color: var(--fg1);
   white-space: pre;
   line-height: 1.2;
-}
-
-.output.system-info pre {
-  margin: 0;
-  color: var(--fg1);
 }
 
 /* Neofetch styling */
@@ -198,36 +187,6 @@ body {
   color: var(--fg1);
 }
 
-.import-section {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid var(--bg2);
-}
-
-.help-text {
-  color: var(--fg3);
-  margin: 10px 0;
-  padding-left: 20px;
-}
-
-.file-drop {
-  background-color: var(--bg1);
-  border: 2px dashed var(--gray);
-  padding: 20px;
-  text-align: center;
-  color: var(--yellow);
-  cursor: pointer;
-  margin: 15px 0;
-  border-radius: 4px;
-  transition: all 0.3s;
-}
-
-.file-drop:hover {
-  border-color: var(--green);
-  background-color: var(--bg2);
-  color: var(--green);
-}
-
 /* Scrollbar styling */
 .bookmark-list::-webkit-scrollbar {
   width: 8px;
@@ -244,22 +203,6 @@ body {
 
 .bookmark-list::-webkit-scrollbar-thumb:hover {
   background: var(--fg3);
-}
-
-/* Blinking cursor */
-.cursor {
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
 }
 
 /* Responsive design */
