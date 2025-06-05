@@ -23,15 +23,19 @@ A sleek, terminal-inspired browser startpage for managing bookmarks with a hacke
 ### 🎨 Terminal Aesthetics
 
 - **Gruvbox Theme**: Dark, eye-friendly color scheme
-- **Transparency Effects**: See-through background like a real terminal
-- **JetBrains Mono Font**: Clean, monospace typography
+- **CaskaydiaCove Nerd Font**: Clean, monospace typography with icon support
 - **Responsive Design**: Works on desktop and mobile
+- **System Info**: Built-in neofetch-style system information display
 
 ## 🚀 Quick Start
 
 1. **Clone or download** this repository
-2. **Open `index.html`** in your browser
-3. **Import bookmarks** using the file upload interface
+2. **Serve from web server** (required for ES6 modules):
+   ```bash
+   python3 -m http.server 8000
+   # Then open http://localhost:8000
+   ```
+3. **Import bookmarks** using the `import` command
 4. **Start typing** bookmark names or URLs to navigate
 
 ## 💻 Usage
@@ -46,7 +50,7 @@ youtube
 
 # Open URLs directly
 netflix.com
-https://delfi.lt
+https://youtube.com
 
 # Search engines
 g javascript tutorial
@@ -58,6 +62,9 @@ r programming advice
 help          # Show all commands
 clear         # Clear terminal output
 import        # Import bookmark file
+export        # Export bookmarks to HTML
+neofetch      # Show system information
+ff            # Alias for neofetch
 ```
 
 ### Keyboard Shortcuts
@@ -66,33 +73,43 @@ import        # Import bookmark file
 - **Enter** - Execute command
 - **↑/↓** - Navigate command history
 - **Escape** - Clear autocomplete
+- **dd** - Clear input (double-tap 'd' when input not focused)
 
 ### Bookmark Import
 
 1. Export bookmarks from your browser as HTML
-2. Type `import` or click the import section
-3. Select your HTML bookmark file
-4. Bookmarks are automatically parsed and saved
+2. Type `import` command
+3. Select your HTML bookmark file from the dialog
+4. Bookmarks are automatically parsed and saved to localStorage
 
 ## 🛠 Installation & Hosting
 
-### Local Usage
+### Local Development
 
 ```bash
-git clone https://github.com/yourusername/terminal-startpage.git
-cd terminal-startpage
-# Open index.html in your browser
+git clone https://github.com/yourusername/linkshell-startpage.git
+cd linkshell-startpage
+
+# Serve with Python (recommended)
+python3 -m http.server 8000
+
+# Or with Node.js
+npx http-server
+
+# Then open http://localhost:8000
 ```
+
+**Important**: Due to ES6 module usage, you must serve from a web server. Opening `index.html` directly (`file://`) won't work due to CORS restrictions.
 
 ### GitHub Pages
 
 1. Fork this repository
 2. Enable GitHub Pages in repository settings
-3. Access at `https://yourusername.github.io/terminal-startpage`
+3. Access at `https://yourusername.github.io/linkshell-startpage`
 
 ### Set as Browser Homepage
 
-1. Host the page (GitHub Pages, Netlify, etc.)
+1. Host the page (GitHub Pages, Netlify, Vercel, etc.)
 2. Set the URL as your browser's homepage
 3. Optional: Set as new tab page using browser extensions
 
@@ -111,6 +128,10 @@ Opening URL: https://netflix.com
 arch@zen-browser:~$ g how to code
 Searching Google for: "how to code"
 
+# System information
+arch@zen-browser:~$ neofetch
+# Shows ASCII art + system info
+
 # Autocomplete (type 'gith' + Tab)
 arch@zen-browser:~$ github_repo_name
 ```
@@ -118,11 +139,25 @@ arch@zen-browser:~$ github_repo_name
 ## 📁 Project Structure
 
 ```
-terminal-startpage/
-├── index.html          # Main HTML structure
-├── styles.css          # Gruvbox theme + transparency
-├── script.js           # Terminal logic & bookmark management
-└── README.md          # This file
+linkshell-startpage/
+├── index.html              # Main HTML structure
+├── styles.css              # Gruvbox theme styling
+├── js/
+│   ├── main.js             # Application entry point
+│   ├── core/
+│   │   ├── AppState.js     # State management
+│   │   ├── HackerStartpage.js  # Main application class
+│   │   └── UIManager.js    # DOM manipulation
+│   ├── modules/
+│   │   ├── AutocompleteHandler.js  # Tab completion logic
+│   │   ├── BookmarkManager.js      # Bookmark operations
+│   │   ├── CommandProcessor.js     # Command routing
+│   │   ├── InputHandler.js         # Keyboard/input handling
+│   │   └── SystemInfo.js           # System information display
+│   └── utils/
+│       ├── SearchProviders.js      # Search engine configs
+│       └── Utils.js                # Utility functions
+└── README.md               # This file
 ```
 
 ## 🔧 Customization
@@ -137,30 +172,36 @@ Edit CSS variables in `styles.css`:
   --fg1: #ebdbb2; /* Text */
   --green: #b8bb26; /* User/success */
   --blue: #83a598; /* Path/info */
+  --red: #fb4934; /* Errors */
+  --yellow: #fabd2f; /* Labels */
   /* ... */
 }
 ```
 
 ### Search Providers
 
-Add new search engines in `script.js`:
+Add new search engines in `js/utils/SearchProviders.js`:
 
 ```javascript
-this.searchProviders = {
-  duckduckgo: {
+this.providers = {
+  d: {
     name: "DuckDuckGo",
     url: "https://duckduckgo.com/?q=",
   },
+  // Add more providers...
 };
 ```
 
-### Transparency
+### Commands
 
-Adjust opacity in `styles.css`:
+Extend functionality by modifying `js/modules/CommandProcessor.js`:
 
-```css
-.terminal {
-  background-color: rgba(40, 40, 40, 0.8); /* 0.8 = 80% opacity */
+```javascript
+async routeCommand(cmd, parts) {
+  const commands = {
+    'your-command': () => this.yourCustomFunction(),
+    // Add custom commands...
+  };
 }
 ```
 
@@ -168,16 +209,40 @@ Adjust opacity in `styles.css`:
 
 - **Local Storage**: Bookmarks saved in browser localStorage
 - **Persistent**: Data survives browser restarts and updates
-- **Private**: Each user manages their own bookmarks
+- **Private**: Each user manages their own bookmarks locally
 - **Cross-Browser**: Import once per browser/device
+- **Export/Import**: Full backup and restore capability
+
+## 🚨 Browser Requirements
+
+- **ES6 Modules**: Modern browser with ES6 module support
+- **LocalStorage**: For bookmark persistence
+- **File API**: For bookmark import/export
+- **Web Server**: Cannot run from `file://` protocol
+
+Tested on: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes following the modular structure
+4. Test thoroughly with a local web server
 5. Submit a pull request
+
+### Development Setup
+
+```bash
+# Clone your fork
+git clone https://github.com/yourusername/linkshell-startpage.git
+cd linkshell-startpage
+
+# Start development server
+python3 -m http.server 8000
+
+# Make changes to js/ files
+# Test at http://localhost:8000
+```
 
 ## 📄 License
 
@@ -186,7 +251,8 @@ MIT License - feel free to use, modify, and distribute.
 ## 🙏 Acknowledgments
 
 - **Gruvbox** color scheme by [morhetz](https://github.com/morhetz/gruvbox)
-- **JetBrains Mono** font by JetBrains
+- **CaskaydiaCove Nerd Font** for beautiful monospace typography
+- **ES6 Modules** for clean, maintainable code architecture
 - Inspired by terminal emulators and hacker culture
 
 ---
