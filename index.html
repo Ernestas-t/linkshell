@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=CaskaydiaCove+Nerd+Font:wght@400;700&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -35,35 +35,23 @@
         <div class="prompt-line">
           <span class="user">arch@zen-browser</span>:<span class="path">~</span
           >$
-          <input type="text" id="commandInput" autofocus />
+          <input
+            type="text"
+            id="commandInput"
+            placeholder="Type a command..."
+            autofocus
+          />
         </div>
 
         <div id="output" class="output"></div>
 
-        <div class="import-section" id="importSection">
-          <div class="prompt-line">
-            <span class="user">arch@zen-browser</span>:<span class="path"
-              >~</span
-            >$
-            <span class="command">import --help</span>
-          </div>
-          <div class="help-text">
-            Usage: Click to import bookmark file<br />
-            Supported formats: HTML export from Firefox, Chrome, etc.
-          </div>
-          <input
-            type="file"
-            id="bookmarkFile"
-            accept=".html"
-            style="display: none"
-          />
-          <div
-            class="file-drop"
-            onclick="document.getElementById('bookmarkFile').click()"
-          >
-            [CLICK TO IMPORT BOOKMARKS]
-          </div>
-        </div>
+        <!-- Hidden file input for import functionality -->
+        <input
+          type="file"
+          id="bookmarkFile"
+          accept=".html"
+          style="display: none"
+        />
       </div>
     </div>
 

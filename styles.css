@@ -25,7 +25,8 @@
 }
 
 body {
-  font-family: "JetBrains Mono", "Consolas", "Monaco", monospace;
+  font-family:
+    "CaskaydiaCove Nerd Font", "JetBrains Mono", "Consolas", "Monaco", monospace;
   background-color: var(--bg0);
   color: var(--fg1);
   margin: 0;
