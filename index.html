@@ -35,17 +35,11 @@
         <div class="prompt-line">
           <span class="user">arch@zen-browser</span>:<span class="path">~</span
           >$
-          <input
-            type="text"
-            id="commandInput"
-            placeholder="Type a command..."
-            autofocus
-          />
+          <input type="text" id="commandInput" autofocus />
         </div>
 
         <div id="output" class="output"></div>
 
-        <!-- Hidden file input for import functionality -->
         <input
           type="file"
           id="bookmarkFile"
@@ -55,6 +49,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
